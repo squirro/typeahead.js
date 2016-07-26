@@ -612,7 +612,7 @@
                     this.$el.html(getSuggestionsHtml()).prepend(that.templates.header ? getHeaderHtml() : null).append(that.templates.footer ? getFooterHtml() : null);
                 }
 
-		this.$el.toggleClass('is-empty', !this.$el.is(':visible'));		
+		this.$el.toggleClass('is-fill', !this.$el.is(':visible'));		
 
                 this.trigger("rendered");
                 function getEmptyHtml() {
