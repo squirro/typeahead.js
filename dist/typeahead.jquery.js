@@ -571,7 +571,8 @@
     }();
     var Dataset = function() {
         "use strict";
-        var datasetKey = "ttDataset", valueKey = "ttValue", datumKey = "ttDatum";
+        var datasetKey = "ttDataset", valueKey = "ttValue", datumKey = "ttDatum",
+            datumFormat = _.identity;
         function Dataset(o) {
             o = o || {};
             o.templates = o.templates || {};
@@ -588,6 +589,10 @@
             this.displayFn = getDisplayFn(o.display || o.displayKey);
             this.templates = getTemplates(o.templates, this.displayFn);
             this.$el = $(html.dataset.replace("%CLASS%", this.name));
+
+            if (o.datumFormat) {
+                datumFormat = o.datumFormat;
+            }
         }
         Dataset.extractDatasetName = function extractDatasetName(el) {
             return $(el).data(datasetKey);
@@ -611,6 +616,9 @@
                 } else if (hasSuggestions) {
                     this.$el.html(getSuggestionsHtml()).prepend(that.templates.header ? getHeaderHtml() : null).append(that.templates.footer ? getFooterHtml() : null);
                 }
+
+                this.$el.toggleClass('is-fill', !this.$el.is(':empty'));
+
                 this.trigger("rendered");
                 function getEmptyHtml() {
                     return that.templates.empty({
@@ -631,6 +639,7 @@
                     return $suggestions;
                     function getSuggestionNode(suggestion) {
                         var $el;
+                        suggestion = datumFormat(suggestion, that.query);
                         $el = $(html.suggestion).append(that.templates.suggestion(suggestion)).data(datasetKey, that.name).data(valueKey, that.displayFn(suggestion)).data(datumKey, suggestion);
                         $el.children().each(function() {
                             $(this).css(css.suggestionChild);
