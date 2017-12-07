@@ -759,7 +759,7 @@
                 this.$menu.css("display", "block");
             },
             _getSuggestions: function getSuggestions() {
-                return this.$menu.find(".tt-suggestion");
+                return (this.$menu && this.$menu.find(".tt-suggestion")) || [];
             },
             _getCursor: function getCursor() {
                 return this.$menu.find(".tt-cursor").first();
